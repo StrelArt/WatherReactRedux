@@ -4,11 +4,11 @@ import {api_key, base_url} from "../utils/constants.js";
 
 const Form = () => {
 
-    const {city} = useSelector(state => state.city);
+    const {city} = useSelector(state => state);
     const dispatch = useDispatch();
 
 
-    const getWeather = city => {
+    const getWeather = (city) => {
         fetch(`${base_url}?q=${city}&appid=${api_key}&units=metric`)
             .then(result => result.json())
             .then(data => {
@@ -17,21 +17,24 @@ const Form = () => {
                 dispatch(setWeather('temp', data.main.temp));
                 dispatch(setWeather('pressure', data.main.pressure));
                 dispatch(setWeather('sunset', data.sys.sunset));
-                dispatch(setMessage(''));
+                // dispatch(setMessage(''));
             })
 
             .catch(() => {
                 dispatch(setMessage("Error! Enter correct city."));
             });
+
+        dispatch(setMessage(''));
     };
 
     return (
-        <form onSubmit={(e) => {
+        <form onSubmit={e => {
             e.preventDefault();
             getWeather(city);
+
         }}>
             <input onChange={e => dispatch(changeCity(e.target.value))}
-            type="text" value={city}/>
+                   type="text" value={city}/>
             <button type="submit">Get Weather</button>
         </form>
     );

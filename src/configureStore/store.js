@@ -8,7 +8,7 @@ const initialState = {
     temp: '',
     pressure: '',
     sunset: '',
-    message: ''
+    message: 'Enter city name!'
 }
 
 export const store = createStore(weatherReducer, initialState);

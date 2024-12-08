@@ -7,7 +7,7 @@ export const weatherReducer = (state, action) => {
         case SET_WEATHER:
             return {...state, [action.payload.weatherKey]: action.payload.weatherValue};
         case SET_MESSAGE:
-            return {...state, message: action.payload || state.message};
+            return {...state, message: action.payload};
         default:
             return state;
 
