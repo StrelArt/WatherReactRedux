@@ -1,39 +1,37 @@
-// const Form = ({getWeather}) => {
-//     const getCity = e => {
-//         e.preventDefault();
-//         const city = e.target.city.value.trim();
-//         getWeather(city);
-//     }
-//     return (
-//         <form onSubmit={getCity}>
-//             <input type="text" name='city'/>
-//             <button type="submit">Get Weather</button>
-//         </form>
-//     );
-// };
-//
-// export default Form;
+import {useDispatch, useSelector} from "react-redux";
+import {changeCity, setMessage, setWeather} from "../actions/weatherActions.js";
+import {api_key, base_url} from "../utils/constants.js";
+
+const Form = () => {
+
+    const {city} = useSelector(state => state.city);
+    const dispatch = useDispatch();
 
 
-import {useState} from "react";
+    const getWeather = city => {
+        fetch(`${base_url}?q=${city}&appid=${api_key}&units=metric`)
+            .then(result => result.json())
+            .then(data => {
+                dispatch(setWeather('country', data.sys.country));
+                dispatch(setWeather('city', data.name));
+                dispatch(setWeather('temp', data.main.temp));
+                dispatch(setWeather('pressure', data.main.pressure));
+                dispatch(setWeather('sunset', data.sys.sunset));
+                dispatch(setMessage(''));
+            })
 
-const Form = ({getWeather}) => {
-    const [city, setCity] = useState("");
-
-    const getCity = e => {
-        e.preventDefault();
-        getWeather(city);
-        setCity("");
-    }
-
-    // const handleChangeCity = e => {
-    //     setCity(e.target.value.trim());
-    // }
-
+            .catch(() => {
+                dispatch(setMessage("Error! Enter correct city."));
+            });
+    };
 
     return (
-        <form onSubmit={getCity}>
-            <input onChange={e => setCity(e.target.value)} type="text" value={city}/>
+        <form onSubmit={(e) => {
+            e.preventDefault();
+            getWeather(city);
+        }}>
+            <input onChange={e => dispatch(changeCity(e.target.value))}
+            type="text" value={city}/>
             <button type="submit">Get Weather</button>
         </form>
     );

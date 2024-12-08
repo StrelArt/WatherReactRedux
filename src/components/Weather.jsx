@@ -1,36 +1,23 @@
-// const Weather = ({weather, message}) => {
-//     if(message) {
-//         return (
-//             <div>{message}</div>
-//         )
-//     }else {
-//         return (
-//             <div>
-//                 <p>Location: {weather.country}, {weather.city}</p>
-//                 <p>Temp: {weather.temp}</p>
-//                 <p>Pressure: {weather.pressure}</p>
-//                 <p>Sunset: {new Date(weather.sunset*1000).toLocaleTimeString()}</p>
-//             </div>
-//         )
-//     }
-// };
-//
-// export default Weather;
+import {useSelector} from "react-redux";
 
+const Weather = () => {
 
-const Weather = ({weather, message}) => {
+    const {city, country, temp, pressure, sunset, message, } = useSelector(state => state);
+
+    const isInitState = city !== '' && country !== '';
 
     return (
         <div className={'infoWeath'}>
-            {!message &&
+            {!isInitState ? (<>Enter city name!</>):
+                (!message ? (
                 <>
-                        <p>Location: {weather.country}, {weather.city}</p>
-                        <p>Temp: {weather.temp}</p>
-                        <p>Pressure: {weather.pressure}</p>
-                        <p>Sunset: {new Date(weather.sunset * 1000).toLocaleTimeString()}</p>
+                        <p>Location: {country}, {city}</p>
+                        <p>Temp: {temp}</p>
+                        <p>Pressure: {pressure}</p>
+                        <p>Sunset: {sunset? new Date(sunset * 1000).toLocaleTimeString():'N/A'}</p>
                 </>
-            }
-            <>{message}</>
+                ):(
+            <>{message}</>))}
         </div>
     )
 
